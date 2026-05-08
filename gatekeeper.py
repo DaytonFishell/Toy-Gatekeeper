@@ -59,6 +59,7 @@ def launch_protected_program(protected_py_path, args=None):
     print(f"Launching protected program: {protected_py_path}")
     print("=" * 60)
     print()
+    sys.stdout.flush()  # Ensure output is displayed before subprocess
 
     # Launch the protected program with the token
     try:

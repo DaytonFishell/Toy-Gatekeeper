@@ -82,6 +82,7 @@ def main():
         sys.exit(1)
 
     print("Token verified. Decrypting and launching protected program...")
+    print()
 
     try:
         # Import cryptography inside to handle missing dependency gracefully
