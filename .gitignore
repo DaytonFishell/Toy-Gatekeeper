@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Toy Gatekeeper specific
+# Generated files
+hello.exe
+hello
+protected_*.py
