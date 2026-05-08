@@ -13,7 +13,15 @@ This is for educational purposes only to demonstrate launcher-dependent executio
 import sys
 import os
 import base64
-from cryptography.fernet import Fernet
+
+
+def _load_fernet():
+    """Load Fernet at runtime to avoid hard import dependency at module load."""
+    try:
+        from importlib import import_module
+        return import_module("cryptography.fernet").Fernet
+    except Exception:
+        return None
 
 
 def create_protected_wrapper(input_exe_path, output_py_path, encryption_key):
@@ -30,6 +38,9 @@ def create_protected_wrapper(input_exe_path, output_py_path, encryption_key):
         original_data = f.read()
 
     # Encrypt the executable
+    Fernet = _load_fernet()
+    if Fernet is None:
+        raise RuntimeError("cryptography package not installed. Install with: pip install cryptography")
     fernet = Fernet(encryption_key)
     encrypted_data = fernet.encrypt(original_data)
 
@@ -163,6 +174,11 @@ def main():
     output_path = f"protected_{base_name}.py"
 
     # Generate a random encryption key
+    Fernet = _load_fernet()
+    if Fernet is None:
+        print("ERROR: cryptography package not installed.")
+        print("Install with: pip install cryptography")
+        sys.exit(1)
     encryption_key = Fernet.generate_key()
 
     print(f"Protecting: {input_path}")
